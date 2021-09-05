@@ -4,6 +4,7 @@ __copyright__ = 'Copyright 2021, Peter Maar'
 __author__ = 'Peter Maar <PeterMaar@protonmail.com>'
 __license__ = 'GNU Lesser General Public License Version 3'
 
+
 # __version__ = '0.0.0'
 # __date__ = 'D Month YYYY'
 # __credits__ = None
@@ -67,7 +68,7 @@ class Chart:
         return len(self.data)  # Return the number of sections
 
     def add_note(self, section_number, note_number, note_object):
-        section_name, section_bpm, section_notes, musthit = self.get_section(section_number)  # Get the section name and notes
+        section_name, section_bpm, section_notes, _ = self.get_section(section_number)  # Get the section name and notes
         section_notes.insert(note_number, note_object)  # Insert the inputted note object at the inputted note position
 
         return len(section_notes)  # Return the number of notes in this section

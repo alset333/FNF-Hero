@@ -24,8 +24,8 @@ __license__ = 'GNU Lesser General Public License Version 3'
 #   along with FNF Hero.  If not, see <https://www.gnu.org/licenses/>.
 
 
-import note
 import chart
+import note
 
 
 def parse_chart_line(line: str):
@@ -42,7 +42,7 @@ def parse_chart_line(line: str):
             return line[0], line[2].lower(), line[3]  # timestamp, key, value
         elif line[3] == 'section':  # Section name like [1234, '=', 'E', 'section', "Some", 'Section', 'Name']
             return line[0], line[2].lower(), (line[3], ' '.join(line[4:]))
-        elif len(line) == 5:   # timestamp = key value value
+        elif len(line) == 5:  # timestamp = key value value
             return line[0], line[2].lower(), (line[3], line[4])  # timestamp, key, (val1, val2)
         else:
             print("Cannot parse line:\n", line)
@@ -72,7 +72,6 @@ def process_external_chart(source_chart_contents: str):
     section_pos_hardsinglebass = None
     section_pos_expertsingle = None
     section_pos_expertsinglebass = None
-
 
     # Process each line
     for i in range(len(lines)):
@@ -109,7 +108,6 @@ def process_external_chart(source_chart_contents: str):
         # if '[expertsinglebass]' in lines_lower:
         #     section_pos_expertsinglebass = lines_lower.index('[expertsinglebass]')
 
-
     # print(section_pos_song,
     #       section_pos_synctrack,
     #       section_pos_events,
@@ -127,8 +125,8 @@ def process_external_chart(source_chart_contents: str):
     ############################
 
     sec_start = section_pos_song
-    sec_end = lines.index('}', sec_start+1)  # Find the end of the section (first '}' after start)
-    section = lines[sec_start+2:sec_end]  # Isolate the section
+    sec_end = lines.index('}', sec_start + 1)  # Find the end of the section (first '}' after start)
+    section = lines[sec_start + 2:sec_end]  # Isolate the section
 
     name = None
     offset = None
@@ -162,7 +160,6 @@ def process_external_chart(source_chart_contents: str):
             genre = val
         elif key == 'mediatype':
             mediatype = val
-
 
     # print(name,
     # offset,
@@ -219,11 +216,9 @@ def process_external_chart(source_chart_contents: str):
 
             # TODO get BPM
 
-
     chart_sections.sort()  # Sort them so they are ordered by position
 
     # print(chart_sections)
-
 
     ############################
     # Process the notes section
@@ -261,7 +256,6 @@ def process_external_chart(source_chart_contents: str):
     # Build an internal chart
     ############################
 
-
     times = []
     # time_lookup = {}
 
@@ -281,7 +275,6 @@ def process_external_chart(source_chart_contents: str):
 
     times.sort()
 
-
     # print(time_lookup)
 
     internal_chart = chart.Chart(name, bpm)
@@ -296,9 +289,7 @@ def process_external_chart(source_chart_contents: str):
         for n in range(len(chart_notes)):
             nte = chart_notes[n]
             if nte[0] == time:
-                internal_chart.add_note(latest_section_number, n, note.Note(nte[0], nte[0]+nte[1][1], nte[1][0]))
-
-
+                internal_chart.add_note(latest_section_number, n, note.Note(nte[0], nte[0] + nte[1][1], nte[1][0]))
 
     #
     # for t in times:
@@ -306,7 +297,6 @@ def process_external_chart(source_chart_contents: str):
     #
     #
     #
-
 
     #
     # for i in range(len(chart_sections)):
@@ -332,8 +322,6 @@ def process_external_chart(source_chart_contents: str):
     # #     fret = ext_note[1][0]
     # #     n = note.Note(start, end, fret)
     # #     print(n)
-
-
 
     return internal_chart
 

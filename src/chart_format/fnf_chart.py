@@ -83,7 +83,7 @@ def export_chart(internal_chart: chart):
         section_notes = []
         for nt in section[2]:
             if nt:
-                section_notes.append([nt.start_time, nt.fret, nt.end_time-nt.start_time])
+                section_notes.append([nt.start_time, nt.fret, nt.end_time - nt.start_time])
 
         if section[2]:
             section_bpm = section[1]

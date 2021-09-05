@@ -4,6 +4,7 @@ __copyright__ = 'Copyright 2021, Peter Maar'
 __author__ = 'Peter Maar <PeterMaar@protonmail.com>'
 __license__ = 'GNU Lesser General Public License Version 3'
 
+
 # __version__ = '0.0.0'
 # __date__ = 'D Month YYYY'
 # __credits__ = None
