@@ -14,11 +14,12 @@ def parse_chart_line(line: str):
     if type(line[0]) is int:  # Key is numerical
         if len(line) == 4:  # timestamp = key value
             return line[0], line[2].lower(), line[3]  # timestamp, key, value
+        elif line[3] == 'section':  # Section name like [1234, '=', 'E', 'section', "Some", 'Section', 'Name']
+            return line[0], line[2].lower(), (line[3], ' '.join(line[4:]))
         elif len(line) == 5:   # timestamp = key value value
             return line[0], line[2].lower(), (line[3], line[4])  # timestamp, key, (val1, val2)
         else:
             print("Cannot parse line:\n", line)
-
 
     else:  # Key is not numerical
         if type(line[2]) is int:  # Key = NUMBER
@@ -56,26 +57,32 @@ def process_external_chart(source_chart_contents: str):
         # Required sections
         section_pos_song = lines_lower.index('[song]')
         section_pos_synctrack = lines_lower.index('[synctrack]')
+        section_pos_events = lines_lower.index('[events]')
 
-        # Optional sections
-        if '[events]' in lines_lower:
-            section_pos_events = lines_lower.index('[events]')
-        if '[easysingle]' in lines_lower:
-            section_pos_easysingle = lines_lower.index('[easysingle]')
-        if '[easysinglebass]' in lines_lower:
-            section_pos_easysinglebass = lines_lower.index('[easysinglebass]')
-        if '[mediumsingle]' in lines_lower:
-            section_pos_mediumsingle = lines_lower.index('[mediumsingle]')
-        if '[mediumsinglebass]' in lines_lower:
-            section_pos_mediumsinglebass = lines_lower.index('[mediumsinglebass]')
-        if '[hardsingle]' in lines_lower:
-            section_pos_hardsingle = lines_lower.index('[hardsingle]')
-        if '[hardsinglebass]' in lines_lower:
-            section_pos_hardsinglebass = lines_lower.index('[hardsinglebass]')
-        if '[expertsingle]' in lines_lower:
-            section_pos_expertsingle = lines_lower.index('[expertsingle]')
-        if '[expertsinglebass]' in lines_lower:
-            section_pos_expertsinglebass = lines_lower.index('[expertsinglebass]')
+        DIFFICULTY_AND_INSTRUMENT = 'MediumDoubleBass'  # TODO
+
+        section_notes_name = '[' + DIFFICULTY_AND_INSTRUMENT.lower() + ']'
+
+        if section_notes_name in lines_lower:
+            section_pos_notes = lines_lower.index(section_notes_name)
+
+        # if '[easysingle]' in lines_lower:
+        #     section_pos_easysingle = lines_lower.index('[easysingle]')
+        # if '[easysinglebass]' in lines_lower:
+        #     section_pos_easysinglebass = lines_lower.index('[easysinglebass]')
+        # if '[mediumsingle]' in lines_lower:
+        #     section_pos_mediumsingle = lines_lower.index('[mediumsingle]')
+        # if '[mediumsinglebass]' in lines_lower:
+        #     section_pos_mediumsinglebass = lines_lower.index('[mediumsinglebass]')
+        # if '[hardsingle]' in lines_lower:
+        #     section_pos_hardsingle = lines_lower.index('[hardsingle]')
+        # if '[hardsinglebass]' in lines_lower:
+        #     section_pos_hardsinglebass = lines_lower.index('[hardsinglebass]')
+        # if '[expertsingle]' in lines_lower:
+        #     section_pos_expertsingle = lines_lower.index('[expertsingle]')
+        # if '[expertsinglebass]' in lines_lower:
+        #     section_pos_expertsinglebass = lines_lower.index('[expertsinglebass]')
+
 
     # print(section_pos_song,
     #       section_pos_synctrack,
@@ -205,9 +212,7 @@ def process_external_chart(source_chart_contents: str):
     # section_pos_expertsingle
     # section_pos_expertsinglebass
 
-    NOTE_SECTION_POS = section_pos_expertsingle  # TODO option to change at runtime from available
-
-    sec_start = NOTE_SECTION_POS
+    sec_start = section_pos_notes
     sec_end = lines.index('}', sec_start + 1)  # Find the end of the section (first '}' after start)
     section = lines[sec_start + 2:sec_end]  # Isolate the section
 

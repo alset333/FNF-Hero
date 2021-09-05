@@ -7,9 +7,11 @@ import re
 import chart_format.dot_chart
 import chart_format.fnf_chart
 
+
+
 if __name__ == "__main__":
 
-    DOT_CHART_FILE = os.path.normpath(sys.path[0] + "/../test_files/notes.chart")
+    DOT_CHART_FILE = os.path.normpath(sys.path[0] + "/../test_files/ttfaf.chart")
     FNF_CHART_FILE = os.path.normpath(sys.path[0] + "/../test_files/tutorial.json")
 
     fnf_chart = chart_format.fnf_chart.process_external_chart(open(FNF_CHART_FILE).read())
