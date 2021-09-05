@@ -22,10 +22,10 @@ class Chart:
                + "Sections: " + str(self.get_section_count()) + "\n" \
                + "Notes: " + str(notes)
 
-    def add_section(self, section_number, section_bpm=None, section_name=None):
+    def add_section(self, section_number, section_bpm=None, section_name=None, musthit=True):
         section_notes = []  # Start with an empty list (no notes in the section)
         # Represent section as a tuple of name-string, bpm, and note-list
-        section = section_name, section_bpm, section_notes
+        section = section_name, section_bpm, section_notes, musthit
 
         # if section_number:
         self.data.insert(section_number, section)  # Store the section at the index in our data list
@@ -41,10 +41,19 @@ class Chart:
         return len(self.data)  # Return the number of sections
 
     def add_note(self, section_number, note_number, note_object):
-        section_name, section_bpm, section_notes = self.get_section(section_number)  # Get the section name and notes
+        section_name, section_bpm, section_notes, musthit = self.get_section(section_number)  # Get the section name and notes
         section_notes.insert(note_number, note_object)  # Insert the inputted note object at the inputted note position
 
         return len(section_notes)  # Return the number of notes in this section
 
     def get_note(self, section_number, note_number):
         return self.get_section(section_number)[2][note_number]  # Get the section, select the note, return it
+
+    def get_bpm(self, section_number=None):
+        return self.bpm
+
+    def get_name(self):
+        return self.name
+
+    def get_must_hit_section(self, section_number):
+        return self.get_section(section_number)[3]

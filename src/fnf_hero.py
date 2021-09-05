@@ -9,25 +9,23 @@ import chart_format.fnf_chart
 
 if __name__ == "__main__":
 
-    DOT_CHART_FILE = os.path.normpath(sys.path[0] + "/../test_files/test.chart")
-    FNF_CHART_FILE = os.path.normpath(sys.path[0] + "/../test_files/test.json")
+    DOT_CHART_FILE = os.path.normpath(sys.path[0] + "/../test_files/notes.chart")
+    FNF_CHART_FILE = os.path.normpath(sys.path[0] + "/../test_files/tutorial.json")
 
     fnf_chart = chart_format.fnf_chart.process_external_chart(open(FNF_CHART_FILE).read())
 
     dot_chart = chart_format.dot_chart.process_external_chart(open(DOT_CHART_FILE).read())
 
 
-    #
-    # c = chart.Chart("example", 60)
-    #
-    # c.add_section(0)
-    # c.add_section(1, "a section name")
-    #
-    # c.add_note(0, 0, note.Note(0, 10, 0))
-    # c.add_note(1, 0, note.Note(10, 20, 2))
-
     print(fnf_chart)
     print(dot_chart)
+
+
+    fnf_export = chart_format.fnf_chart.export_chart(dot_chart)
+
+    print(fnf_export)
+
+
 
 
     None
