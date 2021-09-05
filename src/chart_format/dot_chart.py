@@ -77,17 +77,17 @@ def process_external_chart(source_chart_contents: str):
         if '[expertsinglebass]' in lines_lower:
             section_pos_expertsinglebass = lines_lower.index('[expertsinglebass]')
 
-    print(section_pos_song,
-          section_pos_synctrack,
-          section_pos_events,
-          section_pos_easysingle,
-          section_pos_easysinglebass,
-          section_pos_mediumsingle,
-          section_pos_mediumsinglebass,
-          section_pos_hardsingle,
-          section_pos_hardsinglebass,
-          section_pos_expertsingle,
-          section_pos_expertsinglebass)
+    # print(section_pos_song,
+    #       section_pos_synctrack,
+    #       section_pos_events,
+    #       section_pos_easysingle,
+    #       section_pos_easysinglebass,
+    #       section_pos_mediumsingle,
+    #       section_pos_mediumsinglebass,
+    #       section_pos_hardsingle,
+    #       section_pos_hardsinglebass,
+    #       section_pos_expertsingle,
+    #       section_pos_expertsinglebass)
 
     ############################
     # Process the "Song" section
@@ -131,15 +131,15 @@ def process_external_chart(source_chart_contents: str):
             mediatype = val
 
 
-    print(name,
-    offset,
-    resolution,
-    player2,
-    difficulty,
-    previewstart,
-    previewend,
-    genre,
-    mediatype)
+    # print(name,
+    # offset,
+    # resolution,
+    # player2,
+    # difficulty,
+    # previewstart,
+    # previewend,
+    # genre,
+    # mediatype)
 
     ############################
     # Process the "SyncTrack" section
@@ -160,10 +160,10 @@ def process_external_chart(source_chart_contents: str):
         if key == 'ts':
             time_signature = val
         elif key == 'b':
-            bpm = val
+            bpm = val / 1000
 
-    print(time_signature,
-          bpm)
+    # print(time_signature,
+    #       bpm)
 
     ############################
     # Process the "Events" section
@@ -179,6 +179,7 @@ def process_external_chart(source_chart_contents: str):
         ln = section[i]
 
         pos, key, val = parse_chart_line(ln)
+        pos = 1000 * (pos / resolution) / (bpm / 60)
 
         if key == 'e' and val[0] == 'section':
             chart_sections.append((pos, val[1]))  # Add pos, name to our list of sections for use later
@@ -188,7 +189,7 @@ def process_external_chart(source_chart_contents: str):
 
     chart_sections.sort()  # Sort them so they are ordered by position
 
-    print(chart_sections)
+    # print(chart_sections)
 
 
     ############################
@@ -216,43 +217,91 @@ def process_external_chart(source_chart_contents: str):
         ln = section[i]
 
         pos, key, val = parse_chart_line(ln)
+        pos = 1000 * (pos / resolution) / (bpm / 60)
 
         if key == 'n':
             chart_notes.append((pos, val))
 
     chart_notes.sort()
 
-    print(chart_notes)  # Sort them so they are ordered by position
+    # print(chart_notes)  # Sort them so they are ordered by position
 
     ############################
     # Build an internal chart
     ############################
 
+
+    times = []
+    # time_lookup = {}
+
+    for s in chart_sections:
+        if s[0] not in times:
+            times.append(s[0])
+        # if s[0] not in time_lookup:
+        #     time_lookup[s[0]] = []
+        # time_lookup[s[0]].append(s)
+
+    for c in chart_notes:
+        if c[0] not in times:
+            times.append(c[0])
+        # if c[0] not in time_lookup:
+        #     time_lookup[c[0]] = []
+        # time_lookup[c[0]].append(c)
+
+    times.sort()
+
+
+    # print(time_lookup)
+
     internal_chart = chart.Chart(name, bpm)
+    latest_section_number = 0
 
-    for i in range(len(chart_sections)):
-        sec = chart_sections[i]
-        internal_chart.add_section(i, sec[0], section_name=sec[1])  # TODO get BPM
-
-    for i in range(len(chart_notes)):
-        ext_note = chart_notes[i]
-
-        start = ext_note[0]  # TODO ms not ticks
-        end = ext_note[0] + ext_note[1][1]
-        fret = ext_note[1][0]
-        n = note.Note(start, end, fret)
-
-        # internal_chart.add_note(n)
+    for time in times:
+        for s in range(len(chart_sections)):
+            sec = chart_sections[s]
+            if sec[0] == time:
+                internal_chart.add_section(i, section_name=sec[1])
+                latest_section_number = s
+        for n in range(len(chart_notes)):
+            nte = chart_notes[n]
+            if nte[0] == time:
+                internal_chart.add_note(latest_section_number, n, note.Note(nte[0], nte[0]+nte[1][1], nte[1][0]))
 
 
-    # current_position = 0
+
     #
-    # for ext_note in chart_notes:
+    # for t in times:
+    #
+    #
+    #
+    #
+
+
+    #
+    # for i in range(len(chart_sections)):
+    #     sec = chart_sections[i]
+    #     internal_chart.add_section(i, sec[0], section_name=sec[1])  # TODO get BPM
+    #
+    # for i in range(len(chart_notes)):
+    #     ext_note = chart_notes[i]
+    #
     #     start = ext_note[0]  # TODO ms not ticks
     #     end = ext_note[0] + ext_note[1][1]
     #     fret = ext_note[1][0]
     #     n = note.Note(start, end, fret)
-    #     print(n)
+    #
+    #     # internal_chart.add_note(n)
+    #
+    #
+    # # current_position = 0
+    # #
+    # # for ext_note in chart_notes:
+    # #     start = ext_note[0]  # TODO ms not ticks
+    # #     end = ext_note[0] + ext_note[1][1]
+    # #     fret = ext_note[1][0]
+    # #     n = note.Note(start, end, fret)
+    # #     print(n)
+
 
 
     return internal_chart

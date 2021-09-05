@@ -9,9 +9,18 @@ class Chart:
         self.data = []  # Important to re-init empty value each time
 
     def __str__(self):
+
+        notes = ""
+
+        for s in range(self.get_section_count()):
+            sec = self.get_section(s)
+            for note in sec[2]:
+                notes = notes + str(note) + "\n"
+
         return "Name: " + str(self.name) + "\n" \
                + "BPM: " + str(self.bpm) + "\n" \
-               + "Sections: " + str(self.get_section_count())
+               + "Sections: " + str(self.get_section_count()) + "\n" \
+               + "Notes: " + str(notes)
 
     def add_section(self, section_number, section_bpm=None, section_name=None):
         section_notes = []  # Start with an empty list (no notes in the section)

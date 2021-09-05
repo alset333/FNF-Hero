@@ -26,7 +26,8 @@ if __name__ == "__main__":
     # c.add_note(0, 0, note.Note(0, 10, 0))
     # c.add_note(1, 0, note.Note(10, 20, 2))
 
-
+    print(fnf_chart)
+    print(dot_chart)
 
 
     None
