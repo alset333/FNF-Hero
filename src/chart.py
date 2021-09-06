@@ -76,6 +76,12 @@ class Chart:
     def get_note(self, section_number, note_number):
         return self.get_section(section_number)[2][note_number]  # Get the section, select the note, return it
 
+    def replace_note(self, section_number, note_number, new_note_object):
+        section_name, section_bpm, section_notes, _ = self.get_section(section_number)  # Get the section name and notes
+        section_notes[note_number] = new_note_object  # Replace the note at the inputted position
+
+        return len(section_notes)  # Return the number of notes in this section
+
     def get_bpm(self, section_number=None):
         return self.bpm
 
@@ -84,3 +90,12 @@ class Chart:
 
     def get_must_hit_section(self, section_number):
         return self.get_section(section_number)[3]
+
+    def remap_frets(self, new_mapping: dict):
+        for s in range(self.get_section_count()):
+            sec = self.get_section(s)
+            for n in range(len(sec[2])):
+                nte = self.get_note(s, n)
+                nte.fret = new_mapping[nte.fret]
+                self.replace_note(s, n, nte)
+

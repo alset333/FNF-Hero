@@ -34,15 +34,33 @@ import chart_format.dot_chart
 import chart_format.fnf_chart
 
 if __name__ == "__main__":
-    DOT_CHART_FILE = os.path.normpath(sys.path[0] + "/../test_files/ttfaf.chart")
-    FNF_CHART_FILE = os.path.normpath(sys.path[0] + "/../test_files/tutorial.json")
 
-    fnf_chart = chart_format.fnf_chart.process_external_chart(open(FNF_CHART_FILE).read())
+    # FNF_CHART_FILE = os.path.normpath(sys.path[0] + "/../test_files/tutorial.json")
+    DOT_CHART_FILE = os.path.normpath(sys.path[0] + "/../test_files/s4.chart")
 
+    # fnf_chart = chart_format.fnf_chart.process_external_chart(open(FNF_CHART_FILE).read())
     dot_chart = chart_format.dot_chart.process_external_chart(open(DOT_CHART_FILE).read())
 
-    print(fnf_chart)
-    print(dot_chart)
+    # print(fnf_chart)
+    # print(dot_chart)
+
+    # Because we leave mustHitSection as true (shows more of the scene) the FNF frets look like [4567 0123]
+
+    # 0-4 is Green-Orange, 5 is a force flag, 6 is the Tap note flag, 7 is the Open note flag
+    # Source: https://www.reddit.com/r/GuitarHero/comments/5zfyad/question_about_the_format_of_chart_files/dezgqrb
+
+    fret_mapping = {
+        0: 0,
+        1: 0,
+        2: 1,
+        3: 2,
+        4: 3,
+        5: 5,
+        6: 6
+    }
+    dot_chart.remap_frets(fret_mapping)
+
+    dot_chart.name = "Tutorial"
 
     fnf_export = chart_format.fnf_chart.export_chart(dot_chart)
 

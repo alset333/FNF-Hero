@@ -84,7 +84,7 @@ def process_external_chart(source_chart_contents: str):
         section_pos_synctrack = lines_lower.index('[synctrack]')
         section_pos_events = lines_lower.index('[events]')
 
-        DIFFICULTY_AND_INSTRUMENT = 'MediumDoubleBass'  # TODO
+        DIFFICULTY_AND_INSTRUMENT = 'HardSingle'  # TODO
 
         section_notes_name = '[' + DIFFICULTY_AND_INSTRUMENT.lower() + ']'
 
