@@ -49,6 +49,7 @@ def process_external_chart(source_chart_contents: str):
 
         internal_chart.add_section(s, musthit=musthit)  # Add a section to our internal chart at the current index
 
+
         for n in range(len(notes)):  # Iterate over the notes within the section, using n as an index
 
             external_note = notes[n]
@@ -64,7 +65,7 @@ def process_external_chart(source_chart_contents: str):
     return internal_chart
 
 
-def export_chart(internal_chart: chart):
+def export_chart(internal_chart: chart, musthit_swap=False):
     # Start with a template dictionary
     external_chart = {'song': {
         'bpm': internal_chart.get_bpm(),
@@ -82,7 +83,8 @@ def export_chart(internal_chart: chart):
         section = internal_chart.get_section(s)
         section_notes = []
         for nt in section[2]:
-            if nt:
+            # If the note exists and it has a fret add it. If fret is "None" don't add it, we probably re-mapped it away
+            if nt and nt.fret is not None:
                 section_notes.append([nt.start_time, nt.fret, nt.end_time - nt.start_time])
 
         if section[2]:
@@ -92,12 +94,17 @@ def export_chart(internal_chart: chart):
             section_bpm = internal_chart.get_bpm()
             change_bpm = False
 
+        if musthit_swap:
+            musthit = not internal_chart.get_must_hit_section(s)
+        else:
+            musthit = internal_chart.get_must_hit_section(s)
+
         external_chart['song']['notes'].append({
             # 'altAnim': False,
             # 'bpm': section_bpm,
             # 'changeBPM': change_bpm,
             'lengthInSteps': 16,  # TODO
-            'mustHitSection': internal_chart.get_must_hit_section(s),  # TODO
+            'mustHitSection': musthit,  # TODO
             'sectionNotes': section_notes,
             'typeOfSection': 0  # TODO
 
