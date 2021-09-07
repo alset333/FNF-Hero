@@ -29,7 +29,6 @@ __license__ = 'GNU Lesser General Public License Version 3'
 
 import argparse
 import os
-import sys
 
 import chart_format.dot_chart
 import chart_format.fnf_chart
@@ -37,9 +36,10 @@ import chart_format.fnf_chart
 SWAP_MUSTHIT = True
 CHART_FORMATS = ['dot_chart', 'fnf_chart']
 
-# Because we leave mustHitSection as true (shows more of the scene) the FNF frets look like [4567 0123]
+# Default for CH -> FNF is mustHitSection true (shows more of the scene at start)
+# When mustHitSection is true in FNF, the FNF frets look like [4567 0123]
 
-# 0-4 is Green-Orange, 5 is a force flag, 6 is the Tap note flag, 7 is the Open note flag
+# In .CHART:  0-4 is Green-Orange, 5 is a force flag, 6 is the Tap note flag, 7 is the Open note flag
 # Source: https://www.reddit.com/r/GuitarHero/comments/5zfyad/question_about_the_format_of_chart_files/dezgqrb
 
 FRET_MAPPING = {
@@ -49,7 +49,8 @@ FRET_MAPPING = {
     3: 2,
     4: 3,
     5: None,
-    6: None
+    6: None,
+    7: 3
 }
 
 if __name__ == "__main__":

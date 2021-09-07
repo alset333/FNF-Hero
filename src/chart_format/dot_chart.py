@@ -84,7 +84,7 @@ def process_external_chart(source_chart_contents: str):
         section_pos_synctrack = lines_lower.index('[synctrack]')
         section_pos_events = lines_lower.index('[events]')
 
-        DIFFICULTY_AND_INSTRUMENT = 'HardSingle'  # TODO
+        DIFFICULTY_AND_INSTRUMENT = 'ExpertSingle'  # TODO
 
         section_notes_name = '[' + DIFFICULTY_AND_INSTRUMENT.lower() + ']'
 
@@ -233,7 +233,7 @@ def process_external_chart(source_chart_contents: str):
     # section_pos_expertsingle
     # section_pos_expertsinglebass
 
-    sec_start = section_pos_notes
+    sec_start = section_pos_notes  # If you get an exception here, try fixing the notes section name (ExpertSingle, HardSingle, etc). Currently it's in DIFFICULTY_AND_INSTRUMENT. TODO
     sec_end = lines.index('}', sec_start + 1)  # Find the end of the section (first '}' after start)
     section = lines[sec_start + 2:sec_end]  # Isolate the section
 
